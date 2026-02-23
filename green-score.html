@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GoldEnergy — Green Score</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    .gauge-section {
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
+      margin: 16px; border-radius: 20px; padding: 24px 20px;
+      display: flex; flex-direction: column; align-items: center;
+      animation: fadeUp 0.4s ease both;
+    }
+    .gauge-wrap { position: relative; width: 140px; height: 140px; margin-bottom: 12px; }
+    .gauge-wrap svg { width: 140px; height: 140px; }
+    .gauge-overlay {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%); text-align: center;
+    }
+    .gauge-overlay .gnum {
+      font-family: 'Syne', sans-serif;
+      font-size: 44px; font-weight: 800; color: white; line-height: 1;
+    }
+    .gauge-overlay .gdenom { font-size: 13px; color: rgba(255,255,255,0.65); }
+    .gauge-label { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: white; margin-bottom: 4px; }
+    .gauge-sub { font-size: 12px; color: rgba(255,255,255,0.75); text-align: center; }
+    .gauge-chips { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; justify-content: center; }
+
+    .impact-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; margin: 0 16px;
+      animation: fadeUp 0.4s ease both 0.05s;
+    }
+    .impact-card {
+      background: white; border-radius: 16px;
+      padding: 14px; box-shadow: 0 2px 12px rgba(26,46,74,0.07);
+    }
+    .impact-card .ic-icon { font-size: 26px; margin-bottom: 6px; }
+    .impact-card .ic-val { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--text); }
+    .impact-card .ic-val small { font-size: 11px; font-weight: 500; color: var(--text-muted); }
+    .impact-card .ic-lbl { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    .history-card {
+      background: white; border-radius: 16px;
+      margin: 0 16px; padding: 14px 16px;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07);
+      animation: fadeUp 0.4s ease both 0.1s;
+    }
+    .history-card h4 {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;
+    }
+
+    .breakdown-card {
+      background: white; border-radius: 16px;
+      margin: 10px 16px 20px; padding: 14px 16px;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07);
+      animation: fadeUp 0.4s ease both 0.15s;
+    }
+    .breakdown-card h4 {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;
+    }
+    .breakdown-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .breakdown-row:last-child { margin-bottom: 0; }
+    .bd-left { display: flex; align-items: center; gap: 8px; }
+    .bd-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .bd-name { font-size: 13px; color: var(--text); font-weight: 500; }
+    .bd-right { display: flex; align-items: center; gap: 8px; }
+    .bd-pct { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); }
+    .bd-bar { width: 80px; height: 6px; background: rgba(26,46,74,0.07); border-radius: 3px; overflow: hidden; }
+    .bd-bar-fill { height: 100%; border-radius: 3px; }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="app-header">
+    <div class="header-logo">
+      <div class="logo-mark">G</div>
+      <div class="logo-wordmark">
+        <div class="top"><span>gold</span>energy</div>
+        <div class="bottom">Eletricidade 100% Verde</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="header-time">17:08</div>
+      <div class="header-notif">🔔<div class="notif-dot"></div></div>
+    </div>
+  </div>
+
+  <div class="app-body">
+    <div class="sidebar">
+      <div class="nav-item" title="Início">🏠</div>
+      <div class="nav-item active" title="Score">🌿</div>
+      <div class="nav-item" title="Solar">☀️</div>
+      <div class="nav-item" title="Previsão">📈</div>
+      <div class="nav-divider"></div>
+      <div class="nav-item" title="Faturas">🧾</div>
+      <div class="nav-item" title="Contrato">📄</div>
+      <div class="sidebar-bottom"><div class="nav-item" title="Perfil">👤</div></div>
+    </div>
+
+    <div class="content">
+      <div class="page-titlebar">
+        <a class="back-btn" href="index.html">‹</a>
+        <div class="page-titlebar-text">
+          <h2>My Green Score</h2>
+          <p>Impacto ambiental em tempo real</p>
+        </div>
+        <div class="page-icon-btn">📤</div>
+      </div>
+
+      <div class="gauge-section">
+        <div class="gauge-wrap">
+          <svg viewBox="0 0 140 140">
+            <circle cx="70" cy="70" r="60" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="10"/>
+            <circle cx="70" cy="70" r="60" fill="none" stroke="white" stroke-width="10"
+              stroke-linecap="round"
+              stroke-dasharray="376.99"
+              stroke-dashoffset="101.8"
+              transform="rotate(-90 70 70)"
+              style="filter:drop-shadow(0 0 8px rgba(255,255,255,0.4))"/>
+          </svg>
+          <div class="gauge-overlay">
+            <div class="gnum">73</div>
+            <div class="gdenom">/100</div>
+          </div>
+        </div>
+        <div class="gauge-label">Score Verde</div>
+        <div class="gauge-sub">Acima de 68% dos utilizadores da tua zona!</div>
+        <div class="gauge-chips">
+          <span class="chip">🌱 -12kg CO₂</span>
+          <span class="chip">⚡ 100% Verde</span>
+          <span class="chip">🌳 3.2 árvores</span>
+        </div>
+      </div>
+
+      <div class="section-hdr"><h4>Impacto Mensal</h4></div>
+      <div class="impact-grid">
+        <div class="impact-card">
+          <div class="ic-icon">🌫️</div>
+          <div class="ic-val">12.4<small> kg</small></div>
+          <div class="ic-lbl">CO₂ poupado</div>
+        </div>
+        <div class="impact-card">
+          <div class="ic-icon">🌳</div>
+          <div class="ic-val">3.2<small> árv.</small></div>
+          <div class="ic-lbl">Árvores equiv.</div>
+        </div>
+        <div class="impact-card">
+          <div class="ic-icon">⚡</div>
+          <div class="ic-val">100<small> %</small></div>
+          <div class="ic-lbl">Energia renovável</div>
+        </div>
+        <div class="impact-card">
+          <div class="ic-icon">📉</div>
+          <div class="ic-val">-8<small> %</small></div>
+          <div class="ic-lbl">vs mês anterior</div>
+        </div>
+      </div>
+
+      <div class="section-hdr" style="padding-top:14px;"><h4>Histórico Score</h4><span>6 meses</span></div>
+      <div class="history-card">
+        <h4>Evolução mensal</h4>
+        <div class="bar-row"><div class="bar-label">Set</div><div class="bar-track"><div class="bar-fill" style="width:52%"></div></div><div class="bar-val">52</div></div>
+        <div class="bar-row"><div class="bar-label">Out</div><div class="bar-track"><div class="bar-fill" style="width:58%"></div></div><div class="bar-val">58</div></div>
+        <div class="bar-row"><div class="bar-label">Nov</div><div class="bar-track"><div class="bar-fill" style="width:61%"></div></div><div class="bar-val">61</div></div>
+        <div class="bar-row"><div class="bar-label">Dez</div><div class="bar-track"><div class="bar-fill" style="width:65%"></div></div><div class="bar-val">65</div></div>
+        <div class="bar-row"><div class="bar-label">Jan</div><div class="bar-track"><div class="bar-fill" style="width:69%"></div></div><div class="bar-val">69</div></div>
+        <div class="bar-row"><div class="bar-label">Fev</div><div class="bar-track"><div class="bar-fill" style="width:73%"></div></div><div class="bar-val">73</div></div>
+      </div>
+
+      <div class="section-hdr" style="padding-top:14px;"><h4>Distribuição CO₂</h4></div>
+      <div class="breakdown-card">
+        <h4>Por categoria</h4>
+        <div class="breakdown-row">
+          <div class="bd-left"><div class="bd-dot" style="background:#2DDBA4;"></div><div class="bd-name">Aquecimento</div></div>
+          <div class="bd-right"><div class="bd-bar"><div class="bd-bar-fill" style="width:45%;background:#2DDBA4;"></div></div><div class="bd-pct">45%</div></div>
+        </div>
+        <div class="breakdown-row">
+          <div class="bd-left"><div class="bd-dot" style="background:#F5C842;"></div><div class="bd-name">Eletrodomésticos</div></div>
+          <div class="bd-right"><div class="bd-bar"><div class="bd-bar-fill" style="width:30%;background:#F5C842;"></div></div><div class="bd-pct">30%</div></div>
+        </div>
+        <div class="breakdown-row">
+          <div class="bd-left"><div class="bd-dot" style="background:#60a5fa;"></div><div class="bd-name">Iluminação</div></div>
+          <div class="bd-right"><div class="bd-bar"><div class="bd-bar-fill" style="width:15%;background:#60a5fa;"></div></div><div class="bd-pct">15%</div></div>
+        </div>
+        <div class="breakdown-row">
+          <div class="bd-left"><div class="bd-dot" style="background:#f87171;"></div><div class="bd-name">Outros</div></div>
+          <div class="bd-right"><div class="bd-bar"><div class="bd-bar-fill" style="width:10%;background:#f87171;"></div></div><div class="bd-pct">10%</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

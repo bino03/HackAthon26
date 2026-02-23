@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GoldEnergy — Contrato</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    .contrato-hero {
+      background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%);
+      margin: 16px; border-radius: 20px; padding: 20px;
+      display: flex; align-items: center; gap: 14px;
+      animation: fadeUp 0.4s ease both;
+    }
+    .contrato-hero-icon { font-size: 46px; flex-shrink: 0; }
+    .contrato-hero-text h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; color: white; }
+    .contrato-hero-text p { font-size: 12px; color: rgba(255,255,255,0.75); margin-top: 4px; line-height: 1.4; }
+    .contrato-badge {
+      display: inline-block; margin-top: 8px;
+      background: rgba(255,255,255,0.2); border-radius: 20px;
+      padding: 3px 10px; font-size: 10px; color: white; font-weight: 700;
+    }
+
+    .info-card {
+      background: white; border-radius: 16px;
+      margin: 0 16px; padding: 16px;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07);
+      animation: fadeUp 0.4s ease both 0.05s;
+    }
+    .info-card h4 {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;
+    }
+    .info-row {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      padding: 9px 0; border-bottom: 1px solid rgba(26,46,74,0.05);
+    }
+    .info-row:last-child { border-bottom: none; }
+    .ir-label { font-size: 12px; color: var(--text-muted); flex-shrink: 0; }
+    .ir-value { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); text-align: right; }
+    .ir-value.green { color: var(--green-dark); }
+    .ir-value.purple { color: #7c3aed; }
+
+    .tarifas-card {
+      background: white; border-radius: 16px;
+      margin: 10px 16px 0; padding: 16px;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07);
+      animation: fadeUp 0.4s ease both 0.1s;
+    }
+    .tarifas-card h4 {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;
+    }
+    .tarifa-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 0; border-bottom: 1px solid rgba(26,46,74,0.05);
+    }
+    .tarifa-row:last-child { border-bottom: none; }
+    .tarifa-icon {
+      width: 34px; height: 34px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .tarifa-icon.vazio { background: #e8f2ff; }
+    .tarifa-icon.cheio { background: #fff3cd; }
+    .tarifa-icon.ponta { background: #fee2e2; }
+    .tarifa-body { flex: 1; }
+    .tarifa-nome { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); }
+    .tarifa-horas { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+    .tarifa-preco { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; color: var(--text); }
+
+    .docs-card {
+      background: white; border-radius: 16px;
+      margin: 10px 16px 20px; overflow: hidden;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07);
+      animation: fadeUp 0.4s ease both 0.15s;
+    }
+    .doc-item {
+      display: flex; align-items: center; padding: 14px 16px;
+      border-bottom: 1px solid rgba(26,46,74,0.05); cursor: pointer;
+      transition: background 0.15s;
+    }
+    .doc-item:last-child { border-bottom: none; }
+    .doc-item:hover { background: #f8fafc; }
+    .doc-icon {
+      width: 36px; height: 36px; border-radius: 9px;
+      background: #f0f0ff; display: flex; align-items: center; justify-content: center;
+      font-size: 17px; flex-shrink: 0; margin-right: 12px;
+    }
+    .doc-body { flex: 1; }
+    .doc-name { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); }
+    .doc-meta { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+    .doc-chevron { color: var(--text-muted); font-size: 18px; }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="app-header">
+    <div class="header-logo">
+      <div class="logo-mark">G</div>
+      <div class="logo-wordmark">
+        <div class="top"><span>gold</span>energy</div>
+        <div class="bottom">Eletricidade 100% Verde</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="header-time">17:08</div>
+      <div class="header-notif">🔔<div class="notif-dot"></div></div>
+    </div>
+  </div>
+
+  <div class="app-body">
+    <div class="sidebar">
+      <div class="nav-item" title="Início">🏠</div>
+      <div class="nav-item" title="Score">🌿</div>
+      <div class="nav-item" title="Solar">☀️</div>
+      <div class="nav-item" title="Previsão">📈</div>
+      <div class="nav-divider"></div>
+      <div class="nav-item" title="Faturas">🧾</div>
+      <div class="nav-item active" title="Contrato">📄</div>
+      <div class="sidebar-bottom"><div class="nav-item" title="Perfil">👤</div></div>
+    </div>
+
+    <div class="content">
+      <div class="page-titlebar">
+        <a class="back-btn" href="index.html">‹</a>
+        <div class="page-titlebar-text">
+          <h2>Contrato</h2>
+          <p>Detalhes do teu contrato atual</p>
+        </div>
+        <div class="page-icon-btn">📤</div>
+      </div>
+
+      <!-- HERO -->
+      <div class="contrato-hero">
+        <div class="contrato-hero-icon">📄</div>
+        <div class="contrato-hero-text">
+          <h3>Plano Verde Premium</h3>
+          <p>Tarifa bi-horária · 100% energia renovável</p>
+          <span class="contrato-badge">✅ Contrato Ativo</span>
+        </div>
+      </div>
+
+      <!-- DADOS DO CONTRATO -->
+      <div class="section-hdr"><h4>Dados do Contrato</h4></div>
+      <div class="info-card">
+        <h4>Informação geral</h4>
+        <div class="info-row">
+          <div class="ir-label">Nº Contrato</div>
+          <div class="ir-value">GE-2024-087432</div>
+        </div>
+        <div class="info-row">
+          <div class="ir-label">Data início</div>
+          <div class="ir-value">01 Jan 2024</div>
+        </div>
+        <div class="info-row">
+          <div class="ir-label">Duração</div>
+          <div class="ir-value">12 meses (renovável)</div>
+        </div>
+        <div class="info-row">
+          <div class="ir-label">Potência contratada</div>
+          <div class="ir-value">6,9 kVA</div>
+        </div>
+        <div class="info-row">
+          <div class="ir-label">Tipo de tarifa</div>
+          <div class="ir-value purple">Bi-horária</div>
+        </div>
+        <div class="info-row">
+          <div class="ir-label">Origem energia</div>
+          <div class="ir-value green">100% Verde 🌿</div>
+        </div>
+        <div class="info-row">
+          <div class="ir-label">CPE</div>
+          <div class="ir-value">PT0034000000000000XX</div>
+        </div>
+      </div>
+
+      <!-- TARIFAS -->
+      <div class="section-hdr" style="padding-top:14px;"><h4>Tarifas Aplicadas</h4></div>
+      <div class="tarifas-card">
+        <h4>Preços por período</h4>
+        <div class="tarifa-row">
+          <div class="tarifa-icon vazio">🌙</div>
+          <div class="tarifa-body">
+            <div class="tarifa-nome">Vazio</div>
+            <div class="tarifa-horas">22h00 – 08h00</div>
+          </div>
+          <div class="tarifa-preco">0,098 €/kWh</div>
+        </div>
+        <div class="tarifa-row">
+          <div class="tarifa-icon cheio">☀️</div>
+          <div class="tarifa-body">
+            <div class="tarifa-nome">Cheio</div>
+            <div class="tarifa-horas">08h00 – 22h00</div>
+          </div>
+          <div class="tarifa-preco">0,187 €/kWh</div>
+        </div>
+        <div class="tarifa-row">
+          <div class="tarifa-icon ponta">⚡</div>
+          <div class="tarifa-body">
+            <div class="tarifa-nome">Ponta</div>
+            <div class="tarifa-horas">09h00 – 12h00 · 18h00 – 21h00</div>
+          </div>
+          <div class="tarifa-preco">0,224 €/kWh</div>
+        </div>
+      </div>
+
+      <!-- DOCUMENTOS -->
+      <div class="section-hdr" style="padding-top:14px;"><h4>Documentos</h4></div>
+      <div class="docs-card">
+        <div class="doc-item">
+          <div class="doc-icon">📋</div>
+          <div class="doc-body">
+            <div class="doc-name">Contrato de Fornecimento</div>
+            <div class="doc-meta">PDF · Assinado a 01 Jan 2024</div>
+          </div>
+          <div class="doc-chevron">›</div>
+        </div>
+        <div class="doc-item">
+          <div class="doc-icon">🔒</div>
+          <div class="doc-body">
+            <div class="doc-name">Condições Gerais</div>
+            <div class="doc-meta">PDF · Versão 2024.1</div>
+          </div>
+          <div class="doc-chevron">›</div>
+        </div>
+        <div class="doc-item">
+          <div class="doc-icon">🌿</div>
+          <div class="doc-body">
+            <div class="doc-name">Certificado Energia Verde</div>
+            <div class="doc-meta">PDF · Válido até Dez 2026</div>
+          </div>
+          <div class="doc-chevron">›</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

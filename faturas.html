@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GoldEnergy — Faturas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    .faturas-hero {
+      background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-mid) 100%);
+      margin: 16px; border-radius: 20px; padding: 18px;
+      animation: fadeUp 0.4s ease both;
+    }
+    .faturas-hero h3 {
+      font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+      color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px;
+    }
+    .faturas-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .fs-item { background: rgba(255,255,255,0.08); border-radius: 12px; padding: 12px; }
+    .fs-item .fs-val { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: white; }
+    .fs-item .fs-val small { font-size: 11px; font-weight: 500; }
+    .fs-item .fs-lbl { font-size: 10px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+
+    .fatura-list {
+      background: white; border-radius: 16px;
+      margin: 0 16px; overflow: hidden;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07);
+      animation: fadeUp 0.4s ease both 0.05s;
+    }
+    .fatura-item {
+      display: flex; align-items: center; padding: 14px 16px;
+      border-bottom: 1px solid rgba(26,46,74,0.05); cursor: pointer;
+      transition: background 0.15s;
+    }
+    .fatura-item:last-child { border-bottom: none; }
+    .fatura-item:hover { background: #f8fafc; }
+    .fatura-item:active { background: var(--green-light); }
+
+    .fi-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0; margin-right: 12px;
+    }
+    .fi-icon.paga { background: var(--green-light); }
+    .fi-icon.pendente { background: #fff3cd; }
+    .fi-icon.vencida { background: #fee2e2; }
+
+    .fi-body { flex: 1; }
+    .fi-mes { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--text); }
+    .fi-data { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+    .fi-right { text-align: right; }
+    .fi-valor { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; color: var(--text); }
+    .fi-status {
+      font-size: 9px; font-weight: 700; padding: 2px 7px;
+      border-radius: 20px; margin-top: 3px; display: inline-block; letter-spacing: 0.04em;
+    }
+    .fi-status.paga { background: var(--green-light); color: var(--green-dark); }
+    .fi-status.pendente { background: #fff3cd; color: #a07000; }
+    .fi-status.vencida { background: #fee2e2; color: #b91c1c; }
+
+    .fatura-detail-card {
+      background: white; border-radius: 16px;
+      margin: 12px 16px 20px; padding: 16px;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07);
+      animation: fadeUp 0.4s ease both 0.1s;
+    }
+    .fatura-detail-card h4 {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;
+    }
+    .detail-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 0; border-bottom: 1px solid rgba(26,46,74,0.05);
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-row .dr-label { font-size: 12px; color: var(--text-muted); }
+    .detail-row .dr-value { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); }
+    .detail-row .dr-value.green { color: var(--green-dark); }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="app-header">
+    <div class="header-logo">
+      <div class="logo-mark">G</div>
+      <div class="logo-wordmark">
+        <div class="top"><span>gold</span>energy</div>
+        <div class="bottom">Eletricidade 100% Verde</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="header-time">17:08</div>
+      <div class="header-notif">🔔<div class="notif-dot"></div></div>
+    </div>
+  </div>
+
+  <div class="app-body">
+    <div class="sidebar">
+      <div class="nav-item" title="Início">🏠</div>
+      <div class="nav-item" title="Score">🌿</div>
+      <div class="nav-item" title="Solar">☀️</div>
+      <div class="nav-item" title="Previsão">📈</div>
+      <div class="nav-divider"></div>
+      <div class="nav-item active" title="Faturas">🧾</div>
+      <div class="nav-item" title="Contrato">📄</div>
+      <div class="sidebar-bottom"><div class="nav-item" title="Perfil">👤</div></div>
+    </div>
+
+    <div class="content">
+      <div class="page-titlebar">
+        <a class="back-btn" href="index.html">‹</a>
+        <div class="page-titlebar-text">
+          <h2>Faturas</h2>
+          <p>Consulta e histórico de faturas</p>
+        </div>
+        <div class="page-icon-btn">🔍</div>
+      </div>
+
+      <!-- SUMMARY -->
+      <div class="faturas-hero">
+        <h3>Resumo 2026</h3>
+        <div class="faturas-summary">
+          <div class="fs-item">
+            <div class="fs-val">246<small> €</small></div>
+            <div class="fs-lbl">Total pago</div>
+          </div>
+          <div class="fs-item">
+            <div class="fs-val">41<small> €</small></div>
+            <div class="fs-lbl">Última fatura</div>
+          </div>
+          <div class="fs-item">
+            <div class="fs-val">287<small> kWh</small></div>
+            <div class="fs-lbl">Consumo médio</div>
+          </div>
+          <div class="fs-item">
+            <div class="fs-val">0<small> em dívida</small></div>
+            <div class="fs-lbl">Situação atual</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FATURA LIST -->
+      <div class="section-hdr"><h4>Histórico</h4><span>2026</span></div>
+      <div class="fatura-list">
+        <div class="fatura-item">
+          <div class="fi-icon pendente">🧾</div>
+          <div class="fi-body">
+            <div class="fi-mes">Fevereiro 2026</div>
+            <div class="fi-data">Vence a 15 Mar 2026</div>
+          </div>
+          <div class="fi-right">
+            <div class="fi-valor">41,20 €</div>
+            <div class="fi-status pendente">Pendente</div>
+          </div>
+        </div>
+        <div class="fatura-item">
+          <div class="fi-icon paga">🧾</div>
+          <div class="fi-body">
+            <div class="fi-mes">Janeiro 2026</div>
+            <div class="fi-data">Paga a 12 Fev 2026</div>
+          </div>
+          <div class="fi-right">
+            <div class="fi-valor">38,90 €</div>
+            <div class="fi-status paga">Paga</div>
+          </div>
+        </div>
+        <div class="fatura-item">
+          <div class="fi-icon paga">🧾</div>
+          <div class="fi-body">
+            <div class="fi-mes">Dezembro 2025</div>
+            <div class="fi-data">Paga a 14 Jan 2026</div>
+          </div>
+          <div class="fi-right">
+            <div class="fi-valor">52,10 €</div>
+            <div class="fi-status paga">Paga</div>
+          </div>
+        </div>
+        <div class="fatura-item">
+          <div class="fi-icon paga">🧾</div>
+          <div class="fi-body">
+            <div class="fi-mes">Novembro 2025</div>
+            <div class="fi-data">Paga a 13 Dez 2025</div>
+          </div>
+          <div class="fi-right">
+            <div class="fi-valor">44,70 €</div>
+            <div class="fi-status paga">Paga</div>
+          </div>
+        </div>
+        <div class="fatura-item">
+          <div class="fi-icon paga">🧾</div>
+          <div class="fi-body">
+            <div class="fi-mes">Outubro 2025</div>
+            <div class="fi-data">Paga a 15 Nov 2025</div>
+          </div>
+          <div class="fi-right">
+            <div class="fi-valor">36,50 €</div>
+            <div class="fi-status paga">Paga</div>
+          </div>
+        </div>
+        <div class="fatura-item">
+          <div class="fi-icon paga">🧾</div>
+          <div class="fi-body">
+            <div class="fi-mes">Setembro 2025</div>
+            <div class="fi-data">Paga a 14 Out 2025</div>
+          </div>
+          <div class="fi-right">
+            <div class="fi-valor">33,80 €</div>
+            <div class="fi-status paga">Paga</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DETAIL CARD -->
+      <div class="section-hdr" style="padding-top:14px;"><h4>Detalhe — Fev 2026</h4></div>
+      <div class="fatura-detail-card">
+        <h4>Composição da fatura</h4>
+        <div class="detail-row">
+          <div class="dr-label">Energia consumida</div>
+          <div class="dr-value">287 kWh</div>
+        </div>
+        <div class="detail-row">
+          <div class="dr-label">Custo energia</div>
+          <div class="dr-value">32,40 €</div>
+        </div>
+        <div class="detail-row">
+          <div class="dr-label">Redes e distribuição</div>
+          <div class="dr-value">5,20 €</div>
+        </div>
+        <div class="detail-row">
+          <div class="dr-label">Impostos (IVA 6%)</div>
+          <div class="dr-value">3,60 €</div>
+        </div>
+        <div class="detail-row">
+          <div class="dr-label">Desconto verde</div>
+          <div class="dr-value green">-2,00 €</div>
+        </div>
+        <div class="detail-row">
+          <div class="dr-label" style="font-weight:700; color:var(--text);">Total</div>
+          <div class="dr-value" style="font-size:16px;">41,20 €</div>
+        </div>
+        <button class="btn-primary" style="margin-top:14px;">⬇️ Descarregar PDF</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GoldEnergy — PowerPredict</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    .predict-hero {
+      background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+      margin: 16px; border-radius: 20px; padding: 20px;
+      display: flex; align-items: center; gap: 14px;
+      animation: fadeUp 0.4s ease both;
+    }
+    .predict-hero-icon { font-size: 48px; flex-shrink: 0; }
+    .predict-hero-text h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 800; color: white; }
+    .predict-hero-text p { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 4px; line-height: 1.4; }
+
+    /* FORECAST SUMMARY */
+    .forecast-banner {
+      background: linear-gradient(120deg, #1e3a5f, #2563eb);
+      margin: 0 16px; border-radius: 18px; padding: 18px;
+      animation: fadeUp 0.4s ease both 0.05s;
+    }
+    .forecast-banner h3 {
+      font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+      color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;
+    }
+    .forecast-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .forecast-item { background: rgba(255,255,255,0.12); border-radius: 12px; padding: 12px; }
+    .forecast-item .f-val { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: white; }
+    .forecast-item .f-val small { font-size: 12px; font-weight: 500; }
+    .forecast-item .f-lbl { font-size: 10px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+    .forecast-item .f-trend { font-size: 10px; margin-top: 4px; font-weight: 600; }
+    .trend-up { color: #fca5a5; }
+    .trend-down { color: #86efac; }
+
+    /* CHART CARD */
+    .chart-card {
+      background: white; border-radius: 16px;
+      margin: 12px 16px 0; padding: 16px;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07);
+      animation: fadeUp 0.4s ease both 0.1s;
+    }
+    .chart-card h4 {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 14px;
+    }
+    .chart-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+    .chart-tab {
+      padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;
+      cursor: pointer; border: 1.5px solid rgba(26,46,74,0.1); color: var(--text-muted);
+      background: none; transition: all 0.2s;
+    }
+    .chart-tab.active { background: var(--navy-dark); color: white; border-color: var(--navy-dark); }
+
+    /* SVG line chart */
+    .line-chart-wrap { width: 100%; overflow: hidden; }
+    .line-chart-wrap svg { width: 100%; height: 120px; }
+    .chart-x-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+    .chart-x-labels span { font-size: 9px; color: var(--text-muted); }
+
+    /* WEEKLY BREAKDOWN */
+    .weekly-card {
+      background: white; border-radius: 16px;
+      margin: 10px 16px 0; padding: 16px;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07);
+      animation: fadeUp 0.4s ease both 0.15s;
+    }
+    .weekly-card h4 {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;
+    }
+    .week-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .week-row:last-child { margin-bottom: 0; }
+    .week-label { font-size: 11px; color: var(--text-muted); width: 80px; flex-shrink: 0; }
+    .week-track { flex: 1; height: 8px; background: rgba(26,46,74,0.07); border-radius: 4px; overflow: hidden; }
+    .week-fill { height: 100%; border-radius: 4px; }
+    .week-fill.blue { background: linear-gradient(90deg, #1e3a5f, #2563eb); }
+    .week-fill.green { background: linear-gradient(90deg, var(--green-dark), var(--green)); }
+    .week-val { font-size: 11px; font-weight: 600; color: var(--text); width: 50px; text-align: right; }
+
+    /* ADVICE CARD */
+    .advice-card {
+      background: white; border-radius: 16px;
+      margin: 10px 16px 20px; padding: 14px 16px;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07);
+      animation: fadeUp 0.4s ease both 0.2s;
+    }
+    .advice-card h4 {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;
+    }
+    .advice-item {
+      display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px;
+    }
+    .advice-item:last-child { margin-bottom: 0; }
+    .advice-icon {
+      width: 30px; height: 30px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0; background: var(--green-light);
+    }
+    .advice-text p { font-size: 12px; color: var(--text); line-height: 1.4; }
+    .advice-text span { font-size: 10px; color: var(--green-dark); font-weight: 600; }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="app-header">
+    <div class="header-logo">
+      <div class="logo-mark">G</div>
+      <div class="logo-wordmark">
+        <div class="top"><span>gold</span>energy</div>
+        <div class="bottom">Eletricidade 100% Verde</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="header-time">17:08</div>
+      <div class="header-notif">🔔<div class="notif-dot"></div></div>
+    </div>
+  </div>
+
+  <div class="app-body">
+    <div class="sidebar">
+      <div class="nav-item" title="Início">🏠</div>
+      <div class="nav-item" title="Score">🌿</div>
+      <div class="nav-item" title="Solar">☀️</div>
+      <div class="nav-item active" title="Previsão">📈</div>
+      <div class="nav-divider"></div>
+      <div class="nav-item" title="Faturas">🧾</div>
+      <div class="nav-item" title="Contrato">📄</div>
+      <div class="sidebar-bottom"><div class="nav-item" title="Perfil">👤</div></div>
+    </div>
+
+    <div class="content">
+      <div class="page-titlebar">
+        <a class="back-btn" href="index.html">‹</a>
+        <div class="page-titlebar-text">
+          <h2>PowerPredict</h2>
+          <p>Previsão de consumo — próximos 30 dias</p>
+        </div>
+        <div class="page-icon-btn">📤</div>
+      </div>
+
+      <div class="predict-hero">
+        <div class="predict-hero-icon">📈</div>
+        <div class="predict-hero-text">
+          <h3>Previsão inteligente</h3>
+          <p>Baseada no teu histórico e padrões de consumo sazonal</p>
+        </div>
+      </div>
+
+      <!-- FORECAST SUMMARY -->
+      <div class="section-hdr" style="padding-top:14px;"><h4>Previsão Março 2026</h4></div>
+      <div class="forecast-banner">
+        <h3>📊 Estimativa do mês</h3>
+        <div class="forecast-grid">
+          <div class="forecast-item">
+            <div class="f-val">312<small> kWh</small></div>
+            <div class="f-lbl">Consumo previsto</div>
+            <div class="f-trend trend-up">▲ +8% vs Fev</div>
+          </div>
+          <div class="forecast-item">
+            <div class="f-val">45<small> €</small></div>
+            <div class="f-lbl">Custo estimado</div>
+            <div class="f-trend trend-up">▲ +4 € vs Fev</div>
+          </div>
+          <div class="forecast-item">
+            <div class="f-val">10.4<small> kWh</small></div>
+            <div class="f-lbl">Média diária</div>
+            <div class="f-trend trend-down">▼ Dentro do normal</div>
+          </div>
+          <div class="forecast-item">
+            <div class="f-val">1.50<small> €</small></div>
+            <div class="f-lbl">Custo médio/dia</div>
+            <div class="f-trend trend-down">▼ Eficiente</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LINE CHART -->
+      <div class="chart-card">
+        <h4>Consumo diário previsto (kWh)</h4>
+        <div class="chart-tabs">
+          <button class="chart-tab active">30 dias</button>
+          <button class="chart-tab">7 dias</button>
+          <button class="chart-tab">3 meses</button>
+        </div>
+        <div class="line-chart-wrap">
+          <svg viewBox="0 0 300 120" preserveAspectRatio="none">
+            <!-- grid lines -->
+            <line x1="0" y1="30" x2="300" y2="30" stroke="rgba(26,46,74,0.05)" stroke-width="1"/>
+            <line x1="0" y1="60" x2="300" y2="60" stroke="rgba(26,46,74,0.05)" stroke-width="1"/>
+            <line x1="0" y1="90" x2="300" y2="90" stroke="rgba(26,46,74,0.05)" stroke-width="1"/>
+            <!-- historical area (blue) -->
+            <defs>
+              <linearGradient id="blueGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#2563eb" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="greenGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#2DDBA4" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#2DDBA4" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <!-- Historical filled area -->
+            <path d="M0,70 L30,65 L60,72 L90,58 L120,62 L150,55 L150,120 L0,120 Z" fill="url(#blueGrad)"/>
+            <path d="M0,70 L30,65 L60,72 L90,58 L120,62 L150,55" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
+            <!-- Forecast dashed line -->
+            <path d="M150,55 L180,50 L210,58 L240,45 L270,52 L300,48" fill="none" stroke="#2DDBA4" stroke-width="2" stroke-dasharray="5,3" stroke-linecap="round"/>
+            <path d="M150,55 L180,50 L210,58 L240,45 L270,52 L300,48 L300,120 L150,120 Z" fill="url(#greenGrad)"/>
+            <!-- divider -->
+            <line x1="150" y1="10" x2="150" y2="110" stroke="rgba(26,46,74,0.15)" stroke-width="1" stroke-dasharray="4,3"/>
+            <text x="152" y="22" font-size="8" fill="rgba(26,46,74,0.4)" font-family="DM Sans">Hoje</text>
+          </svg>
+        </div>
+        <div class="chart-x-labels">
+          <span>1 Mar</span><span>8 Mar</span><span>15 Mar</span><span>22 Mar</span><span>31 Mar</span>
+        </div>
+        <div style="display:flex; gap:14px; margin-top:10px;">
+          <div style="display:flex;align-items:center;gap:5px;">
+            <div style="width:16px;height:3px;background:#2563eb;border-radius:2px;"></div>
+            <span style="font-size:10px;color:var(--text-muted);">Histórico</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;">
+            <div style="width:16px;height:3px;background:#2DDBA4;border-radius:2px;border-top:1px dashed #2DDBA4;"></div>
+            <span style="font-size:10px;color:var(--text-muted);">Previsão</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEKLY BREAKDOWN -->
+      <div class="section-hdr" style="padding-top:14px;"><h4>Por semana</h4><span>kWh</span></div>
+      <div class="weekly-card">
+        <h4>Distribuição semanal prevista</h4>
+        <div class="week-row">
+          <div class="week-label">Semana 1</div>
+          <div class="week-track"><div class="week-fill blue" style="width:72%"></div></div>
+          <div class="week-val">72 kWh</div>
+        </div>
+        <div class="week-row">
+          <div class="week-label">Semana 2</div>
+          <div class="week-track"><div class="week-fill blue" style="width:80%"></div></div>
+          <div class="week-val">80 kWh</div>
+        </div>
+        <div class="week-row">
+          <div class="week-label">Semana 3</div>
+          <div class="week-track"><div class="week-fill green" style="width:78%"></div></div>
+          <div class="week-val">78 kWh</div>
+        </div>
+        <div class="week-row">
+          <div class="week-label">Semana 4</div>
+          <div class="week-track"><div class="week-fill green" style="width:82%"></div></div>
+          <div class="week-val">82 kWh</div>
+        </div>
+      </div>
+
+      <!-- ADVICE -->
+      <div class="section-hdr" style="padding-top:14px;"><h4>Recomendações</h4></div>
+      <div class="advice-card">
+        <h4>Como poupar este mês</h4>
+        <div class="advice-item">
+          <div class="advice-icon">🕙</div>
+          <div class="advice-text">
+            <p>Usa eletrodomésticos de grande consumo entre as 22h e as 8h.</p>
+            <span>Poupança estimada: ~6 €/mês</span>
+          </div>
+        </div>
+        <div class="advice-item">
+          <div class="advice-icon">🌡️</div>
+          <div class="advice-text">
+            <p>Reduz o aquecimento 2°C — representa 10% do consumo.</p>
+            <span>Poupança estimada: ~4.5 €/mês</span>
+          </div>
+        </div>
+        <div class="advice-item">
+          <div class="advice-icon">💡</div>
+          <div class="advice-text">
+            <p>Substitui as últimas lâmpadas incandescentes por LED.</p>
+            <span>Poupança estimada: ~2 €/mês</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>
