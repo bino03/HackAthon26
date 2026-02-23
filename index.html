@@ -41,6 +41,7 @@
       background: var(--bg);
       border-radius: 54px;
       overflow: hidden;
+      position: relative;
       box-shadow: 0 30px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.1);
       display: flex;
       flex-direction: column;
@@ -416,6 +417,97 @@
       from { opacity: 0; transform: translateY(14px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+
+    /* ── NOTIFICAÇÕES PAINEL ── */
+    #notif-overlay {
+      position: absolute; inset: 0;
+      background: rgba(15,30,50,0.45);
+      z-index: 100; opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    #notif-overlay.visivel { opacity: 1; }
+
+    #notif-painel {
+      position: absolute; left: 0; right: 0; top: 0;
+      max-height: 88%;
+      background: #f4f7fb;
+      border-radius: 0 0 24px 24px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+      z-index: 101;
+      flex-direction: column;
+      transform: translateY(-110%);
+      transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+      overflow: hidden;
+    }
+    #notif-painel.aberto { transform: translateY(0); }
+
+    .notif-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 52px 18px 14px;
+      background: linear-gradient(135deg, #0f1e32, #1e3a5f);
+      flex-shrink: 0;
+    }
+    .notif-header-left { display: flex; align-items: center; gap: 8px; }
+    .notif-titulo {
+      font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: white;
+    }
+    .notif-badge {
+      background: #f87171; color: white;
+      font-size: 10px; font-weight: 700;
+      width: 20px; height: 20px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .notif-header-btns { display: flex; align-items: center; gap: 8px; }
+    .notif-marcar-btn {
+      font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.08); border: none; border-radius: 8px;
+      padding: 5px 10px; cursor: pointer;
+    }
+    .notif-fechar-btn {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: rgba(255,255,255,0.12); border: none;
+      color: white; font-size: 14px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .notif-lista { overflow-y: auto; flex: 1; padding-bottom: 16px; }
+    .notif-lista::-webkit-scrollbar { display: none; }
+
+    .notif-grupo-titulo {
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      color: #7a8fa6; text-transform: uppercase; letter-spacing: 0.07em;
+      padding: 14px 18px 6px;
+    }
+
+    .notif-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 11px 18px; margin: 0 12px 6px;
+      background: white; border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(26,46,74,0.06);
+      cursor: pointer; transition: background 0.15s;
+      position: relative;
+    }
+    .notif-item.lida { background: #f8fafc; box-shadow: none; }
+    .notif-item:hover { background: #f0fdf9; }
+
+    .ni-icon {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
+    }
+    .ni-body { flex: 1; min-width: 0; }
+    .ni-modulo { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+    .ni-titulo { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: #1a2e4a; }
+    .ni-desc { font-size: 10px; color: #7a8fa6; margin-top: 2px; line-height: 1.4; }
+    .ni-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 5px; }
+    .ni-hora { font-size: 9px; color: #b0bec5; }
+    .ni-acao {
+      font-size: 10px; font-weight: 700; color: #1aad7e;
+      text-decoration: none;
+    }
+    .ni-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      flex-shrink: 0; margin-top: 4px;
+    }
   </style>
 </head>
 <body>
@@ -559,6 +651,18 @@
           </div>
         </a>
 
+        <a class="menu-item" href="goldrewards.html">
+          <div class="mi-icon gold">🏆</div>
+          <div class="mi-body">
+            <div class="mi-name">GoldRewards</div>
+            <div class="mi-desc">Missoes e recompensas</div>
+          </div>
+          <div class="mi-right">
+            <span class="mi-chevron">›</span>
+            <span class="mi-badge new">Novo</span>
+          </div>
+        </a>
+
         <a class="menu-item" href="faturas.html">
           <div class="mi-icon green">🧾</div>
           <div class="mi-body">
@@ -592,6 +696,18 @@
           </div>
         </a>
 
+        <a class="menu-item" href="goldcare.html">
+          <div class="mi-icon" style="background:#f5f0ff;">💜</div>
+          <div class="mi-body">
+            <div class="mi-name">GoldCare</div>
+            <div class="mi-desc">Monitorização de familiares vulneráveis</div>
+          </div>
+          <div class="mi-right">
+            <span class="mi-chevron">›</span>
+            <span class="mi-badge new">Novo</span>
+          </div>
+        </a>
+
       </div>
 
       <!-- TIP -->
@@ -607,5 +723,6 @@
   </div><!-- /app-body -->
 
 </div><!-- /phone -->
+<script src="js/notifications.js"></script>
 </body>
 </html>

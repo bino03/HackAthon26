@@ -36,6 +36,33 @@
     .trend-up { color: #fca5a5; }
     .trend-down { color: #86efac; }
 
+    /* GOAL CARD */
+    .goal-card {
+      background: white; border-radius: 16px;
+      margin: 10px 16px 0; padding: 16px;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07);
+      animation: fadeUp 0.4s ease both 0.08s;
+    }
+    .goal-card h4 {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px;
+    }
+    .goal-row { display: flex; justify-content: space-between; align-items: baseline; }
+    .goal-row .goal-val { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--navy-dark); }
+    .goal-row .goal-sub { font-size: 10px; color: var(--text-muted); }
+    .goal-edit { display: flex; gap: 6px; align-items: center; margin-top: 8px; }
+    .goal-input {
+      width: 90px; padding: 6px 8px; border-radius: 8px; border: 1px solid rgba(26,46,74,0.12);
+      font-size: 11px; font-weight: 600; color: var(--text); outline: none;
+    }
+    .goal-btn {
+      padding: 6px 10px; border-radius: 8px; border: none; cursor: pointer;
+      background: var(--navy-dark); color: white; font-size: 10px; font-weight: 700;
+    }
+    .goal-track { height: 10px; background: rgba(26,46,74,0.07); border-radius: 999px; margin-top: 10px; overflow: hidden; }
+    .goal-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #22c55e, #f59e0b); width: 0%; transition: width 0.4s ease; }
+    .goal-meta { display: flex; justify-content: space-between; margin-top: 6px; font-size: 10px; color: var(--text-muted); }
+
     /* CHART CARD */
     .chart-card {
       background: white; border-radius: 16px;
@@ -56,8 +83,46 @@
     .chart-tab.active { background: var(--navy-dark); color: white; border-color: var(--navy-dark); }
 
     /* SVG line chart */
-    .line-chart-wrap { width: 100%; overflow: hidden; }
-    .line-chart-wrap svg { width: 100%; height: 120px; }
+    .line-chart-wrap { width: 100%; position: relative; }
+    .line-chart-wrap svg { width: 100%; height: 120px; cursor: crosshair; }
+    .chart-tooltip {
+      position: absolute; 
+      background: rgba(30, 58, 95, 0.95); 
+      color: white; 
+      padding: 10px 14px; 
+      border-radius: 6px; 
+      font-size: 12px; 
+      font-weight: 600;
+      pointer-events: none; 
+      z-index: 10000; 
+      display: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      min-width: 130px;
+      text-align: center;
+      line-height: 1.6;
+      white-space: nowrap;
+    }
+    .chart-tooltip.visible { 
+      display: block;
+    }
+    
+    /* Container do gráfico com posição relativa */
+    #chart-svg-container {
+      position: relative;
+    }
+    .chart-tooltip::after {
+      content: ''; position: absolute; bottom: -5px; left: 50%;
+      transform: translateX(-50%); width: 0; height: 0;
+      border-left: 5px solid transparent; border-right: 5px solid transparent;
+      border-top: 5px solid var(--navy-dark);
+    }
+    .chart-point {
+      transition: r 0.2s ease, stroke-width 0.2s ease;
+      cursor: pointer;
+    }
+    .chart-point:hover {
+      filter: drop-shadow(0 0 4px rgba(37, 99, 235, 0.4));
+    }
     .chart-x-labels { display: flex; justify-content: space-between; margin-top: 4px; }
     .chart-x-labels span { font-size: 9px; color: var(--text-muted); }
 
@@ -80,6 +145,54 @@
     .week-fill.blue { background: linear-gradient(90deg, #1e3a5f, #2563eb); }
     .week-fill.green { background: linear-gradient(90deg, var(--green-dark), var(--green)); }
     .week-val { font-size: 11px; font-weight: 600; color: var(--text); width: 50px; text-align: right; }
+
+    /* ALERT CARD */
+    .alert-card {
+      background: white; border-radius: 16px;
+      margin: 10px 16px 0; padding: 0;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07);
+      animation: fadeUp 0.4s ease both 0.15s;
+      border-left: 4px solid #ff6b6b;
+    }
+
+    /* HEATMAP CARD */
+    .heatmap-card {
+      background: white; border-radius: 16px;
+      margin: 10px 16px 0; padding: 16px;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07);
+      animation: fadeUp 0.4s ease both 0.15s;
+    }
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 4px;
+      margin-top: 8px;
+    }
+    .heatmap-cell {
+      height: 16px;
+      border-radius: 4px;
+    }
+    .heatmap-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-size: 9px;
+      color: var(--text-muted);
+    }
+    .heatmap-legend {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .heatmap-legend-bar {
+      flex: 1;
+      height: 8px;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #22c55e 0%, #facc15 50%, #ef4444 100%);
+    }
 
     /* ADVICE CARD */
     .advice-card {
@@ -179,43 +292,39 @@
         </div>
       </div>
 
+      <!-- MONTHLY GOAL -->
+      <div class="goal-card" id="goal-card">
+        <h4>Meta mensal</h4>
+        <div class="goal-row">
+          <div class="goal-val" id="goal-current">0 kWh</div>
+          <div class="goal-sub" id="goal-target">Meta: 280 kWh</div>
+        </div>
+        <div class="goal-edit">
+          <input class="goal-input" id="goal-input" type="number" min="50" step="10" value="280"/>
+          <button class="goal-btn" id="goal-save">Guardar</button>
+        </div>
+        <div class="goal-track">
+          <div class="goal-fill" id="goal-fill"></div>
+        </div>
+        <div class="goal-meta">
+          <span id="goal-percent">0% da meta</span>
+          <span id="goal-remaining">Faltam 0 kWh</span>
+        </div>
+      </div>
+
       <!-- LINE CHART -->
       <div class="chart-card">
         <h4>Consumo diário previsto (kWh)</h4>
         <div class="chart-tabs">
-          <button class="chart-tab active">30 dias</button>
-          <button class="chart-tab">7 dias</button>
-          <button class="chart-tab">3 meses</button>
+          <button class="chart-tab" data-days="7">7 dias</button>
+          <button class="chart-tab active" data-days="30">30 dias</button>
+          <button class="chart-tab" data-days="90">3 meses</button>
         </div>
-        <div class="line-chart-wrap">
-          <svg viewBox="0 0 300 120" preserveAspectRatio="none">
-            <!-- grid lines -->
-            <line x1="0" y1="30" x2="300" y2="30" stroke="rgba(26,46,74,0.05)" stroke-width="1"/>
-            <line x1="0" y1="60" x2="300" y2="60" stroke="rgba(26,46,74,0.05)" stroke-width="1"/>
-            <line x1="0" y1="90" x2="300" y2="90" stroke="rgba(26,46,74,0.05)" stroke-width="1"/>
-            <!-- historical area (blue) -->
-            <defs>
-              <linearGradient id="blueGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#2563eb" stop-opacity="0.3"/>
-                <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
-              </linearGradient>
-              <linearGradient id="greenGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#2DDBA4" stop-opacity="0.3"/>
-                <stop offset="100%" stop-color="#2DDBA4" stop-opacity="0"/>
-              </linearGradient>
-            </defs>
-            <!-- Historical filled area -->
-            <path d="M0,70 L30,65 L60,72 L90,58 L120,62 L150,55 L150,120 L0,120 Z" fill="url(#blueGrad)"/>
-            <path d="M0,70 L30,65 L60,72 L90,58 L120,62 L150,55" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/>
-            <!-- Forecast dashed line -->
-            <path d="M150,55 L180,50 L210,58 L240,45 L270,52 L300,48" fill="none" stroke="#2DDBA4" stroke-width="2" stroke-dasharray="5,3" stroke-linecap="round"/>
-            <path d="M150,55 L180,50 L210,58 L240,45 L270,52 L300,48 L300,120 L150,120 Z" fill="url(#greenGrad)"/>
-            <!-- divider -->
-            <line x1="150" y1="10" x2="150" y2="110" stroke="rgba(26,46,74,0.15)" stroke-width="1" stroke-dasharray="4,3"/>
-            <text x="152" y="22" font-size="8" fill="rgba(26,46,74,0.4)" font-family="DM Sans">Hoje</text>
-          </svg>
+        <div class="line-chart-wrap" id="chart-svg-container">
+          <!-- Gráfico dinâmico injetado por power-predict.js -->
         </div>
-        <div class="chart-x-labels">
+        <div class="chart-tooltip" id="chart-tooltip"></div>
+        <div class="chart-x-labels" id="chart-x-labels">
           <span>1 Mar</span><span>8 Mar</span><span>15 Mar</span><span>22 Mar</span><span>31 Mar</span>
         </div>
         <div style="display:flex; gap:14px; margin-top:10px;">
@@ -227,6 +336,27 @@
             <div style="width:16px;height:3px;background:#2DDBA4;border-radius:2px;border-top:1px dashed #2DDBA4;"></div>
             <span style="font-size:10px;color:var(--text-muted);">Previsão</span>
           </div>
+        </div>
+      </div>
+
+      <!-- PEAK ALERTS -->
+      <div class="section-hdr" style="padding-top:14px;"><h4>⚠️ Alertas de Consumo</h4></div>
+      <div class="alert-card" id="peak-alerts-container">
+        <p style="text-align: center; color: #86efac; padding: 16px; font-size: 12px;">✓ Sem picos de consumo detectados</p>
+      </div>
+
+      <!-- HEATMAP -->
+      <div class="section-hdr" style="padding-top:14px;"><h4>Heatmap por hora</h4><span>24h</span></div>
+      <div class="heatmap-card">
+        <h4>Quando consomes mais</h4>
+        <div class="heatmap-grid" id="heatmap-grid"></div>
+        <div class="heatmap-labels">
+          <span>0h</span><span>6h</span><span>12h</span><span>18h</span><span>23h</span>
+        </div>
+        <div class="heatmap-legend">
+          <span>Baixo</span>
+          <div class="heatmap-legend-bar"></div>
+          <span>Alto</span>
         </div>
       </div>
 
@@ -286,5 +416,6 @@
     </div>
   </div>
 </div>
+<script src="js/power-predict.js"></script>
 </body>
 </html>

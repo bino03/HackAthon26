@@ -77,7 +77,257 @@
     .detail-row .dr-label { font-size: 12px; color: var(--text-muted); }
     .detail-row .dr-value { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); }
     .detail-row .dr-value.green { color: var(--green-dark); }
+
+    .filter-tabs {
+      display: flex; gap: 8px; margin: 0 16px 12px;
+      overflow-x: auto; scroll-behavior: smooth;
+    }
+    .filter-tabs::-webkit-scrollbar { display: none; }
+    .filter-tab {
+      padding: 8px 16px; border-radius: 20px;
+      background: rgba(26,46,74,0.05); color: var(--text-muted);
+      font-size: 12px; font-weight: 600; white-space: nowrap;
+      cursor: pointer; transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+    .filter-tab.active {
+      background: var(--green); color: white;
+      border-color: var(--green-dark);
+    }
+
+    .stats-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; margin: 0 16px 12px;
+    }
+    .stat-box {
+      background: white; border-radius: 12px;
+      padding: 12px; box-shadow: 0 2px 8px rgba(26,46,74,0.05);
+      animation: fadeUp 0.4s ease both;
+    }
+    .stat-box .sb-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; }
+    .stat-box .sb-value { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: var(--text); margin-top: 4px; }
+    .stat-box .sb-change { font-size: 10px; margin-top: 3px; }
+    .stat-box .sb-change.up { color: #dc2626; }
+    .stat-box .sb-change.down { color: var(--green-dark); }
+
+    .consumo-chart {
+      background: white; border-radius: 16px;
+      margin: 12px 16px; padding: 14px;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07);
+      animation: fadeUp 0.4s ease both 0.08s;
+    }
+    .consumo-chart h4 {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;
+    }
+    .chart-container {
+      display: flex; align-items: flex-end; gap: 8px; height: 120px;
+      justify-content: space-around; margin-bottom: 12px; padding: 0 4px;
+    }
+    .chart-bar-wrapper {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      position: relative; min-width: 30px;
+    }
+    .chart-bar {
+      width: 100%; min-height: 10px; background: linear-gradient(180deg, #2DDBA4 0%, #1a8f63 100%);
+      border-radius: 3px 3px 0 0; position: relative; transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(45, 219, 164, 0.2);
+      cursor: pointer;
+    }
+    .chart-bar:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 4px 12px rgba(45, 219, 164, 0.5);
+      z-index: 10;
+    }
+    .chart-bar.secondary {
+      background: rgba(26, 46, 74, 0.15);
+      box-shadow: 0 1px 4px rgba(26, 46, 74, 0.1);
+    }
+    .chart-bar.secondary:hover {
+      background: rgba(26, 46, 74, 0.25);
+    }
+    .chart-bar-value {
+      font-size: 8px; font-weight: 700; color: var(--text);
+      position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
+      white-space: nowrap; background: white; padding: 2px 4px; border-radius: 3px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .chart-label {
+      font-size: 10px; color: var(--text-muted); text-align: center; margin-top: 6px;
+      font-weight: 500;
+    }
+
+    .fatura-item.urgent {
+      border-left: 3px solid #dc2626;
+      background: #fef2f2;
+    }
+
+    .btn-pay {
+      background: var(--green); color: white;
+      padding: 12px 16px; border-radius: 12px;
+      font-weight: 600; margin-top: 12px; width: 100%;
+      border: none; cursor: pointer; transition: all 0.2s;
+      font-family: 'Syne', sans-serif;
+    }
+    .btn-pay:hover { background: var(--green-dark); }
+
+    .consumo-detalhes {
+      background: white; border-radius: 16px;
+      margin: 12px 16px 20px; padding: 14px;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07);
+      animation: fadeUp 0.4s ease both 0.12s;
+    }
+    .consumo-detalhes h4 {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;
+    }
+    .detalhe-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 0; border-bottom: 1px solid rgba(26,46,74,0.05);
+    }
+    .detalhe-item:last-child { border-bottom: none; }
+    .di-label { font-size: 12px; color: var(--text); }
+    .di-value { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: var(--text); }
   </style>
+  <script>
+    // Dados de consumo dos últimos 6 meses
+    const consumoData = [
+      { mes: 'Set', valor: 245 },
+      { mes: 'Out', valor: 268 },
+      { mes: 'Nov', valor: 289 },
+      { mes: 'Dez', valor: 310 },
+      { mes: 'Jan', valor: 295 },
+      { mes: 'Fev', valor: 287 }
+    ];
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Gerar gráfico
+      gerarGrafico();
+
+      // Filtro de abas
+      const filterTabs = document.querySelectorAll('.filter-tab');
+      filterTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          filterTabs.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          
+          const filterText = this.textContent.trim();
+          const items = document.querySelectorAll('.fatura-item');
+          
+          items.forEach(item => {
+            const hasPaga = item.querySelector('.fi-status.paga');
+            const hasPendente = item.querySelector('.fi-status.pendente');
+            const hasVencida = item.querySelector('.fi-status.vencida');
+            
+            if (filterText.includes('Todas')) {
+              item.style.display = 'flex';
+            } else if (filterText.includes('Pagas') && hasPaga) {
+              item.style.display = 'flex';
+            } else if (filterText.includes('Pendentes') && hasPendente) {
+              item.style.display = 'flex';
+            } else if (filterText.includes('Vencidas') && hasVencida) {
+              item.style.display = 'flex';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      // Botão pagar fatura
+      const btnPay = document.querySelector('.btn-pay');
+      if (btnPay) {
+        btnPay.addEventListener('click', function() {
+          alert('Redirecionando para pagamento da fatura de 41,20€...\n\nEm produção, isto abriria um formulário de pagamento seguro.');
+        });
+      }
+
+      // Botão descarregar PDF
+      const btnPdf = document.querySelector('.btn-primary');
+      if (btnPdf) {
+        btnPdf.addEventListener('click', function() {
+          alert('Descarregando PDF da fatura de Fevereiro 2026...\n\nEm produção, isto faria download do ficheiro PDF.');
+        });
+      }
+
+      // Clique em item de fatura para expandir detalhes
+      const faturaItems = document.querySelectorAll('.fatura-item:not(.urgent)');
+      faturaItems.forEach(item => {
+        item.style.cursor = 'pointer';
+        item.addEventListener('click', function() {
+          const mes = this.querySelector('.fi-mes').textContent;
+          alert('Detalhes da fatura: ' + mes);
+        });
+      });
+    });
+
+    function gerarGrafico() {
+      const container = document.getElementById('chartContainer');
+      if (!container) {
+        console.error('Container não encontrado');
+        return;
+      }
+
+      container.innerHTML = '';
+      
+      if (!consumoData || consumoData.length === 0) {
+        console.error('Dados não disponíveis');
+        return;
+      }
+      
+      // Encontrar valor máximo para escala
+      const maxValor = Math.max(...consumoData.map(d => d.valor));
+      const minAltura = 15; // altura mínima em px
+      const maxAltura = 100; // altura máxima em px
+      
+      // Criar barras
+      consumoData.forEach((data, index) => {
+        const percentagem = (data.valor / maxValor) * (maxAltura - minAltura) + minAltura;
+        const ehAtual = index === consumoData.length - 1;
+        
+        const wrapper = document.createElement('div');
+        wrapper.className = 'chart-bar-wrapper';
+        
+        const bar = document.createElement('div');
+        bar.className = `chart-bar ${!ehAtual ? 'secondary' : ''}`;
+        bar.style.height = percentagem + 'px';
+        bar.style.minWidth = '25px';
+        
+        // Mostrar valor ao hover
+        const showValue = () => {
+          if (!bar.querySelector('.chart-bar-value')) {
+            const value = document.createElement('div');
+            value.className = 'chart-bar-value';
+            value.textContent = data.valor + 'kWh';
+            bar.appendChild(value);
+          }
+        };
+        
+        const hideValue = () => {
+          const value = bar.querySelector('.chart-bar-value');
+          if (value) value.remove();
+        };
+        
+        bar.addEventListener('mouseenter', showValue);
+        bar.addEventListener('mouseleave', hideValue);
+        bar.addEventListener('touchstart', showValue);
+        bar.addEventListener('touchend', hideValue);
+        
+        bar.addEventListener('click', function(e) {
+          e.stopPropagation();
+          alert(`Consumo em ${data.mes}: ${data.valor} kWh`);
+        });
+        
+        const label = document.createElement('div');
+        label.className = 'chart-label';
+        label.textContent = data.mes;
+        
+        wrapper.appendChild(bar);
+        wrapper.appendChild(label);
+        container.appendChild(wrapper);
+      });
+    }
+  </script>
 </head>
 <body>
 <div class="phone">
@@ -117,6 +367,14 @@
         <div class="page-icon-btn">🔍</div>
       </div>
 
+      <!-- FILTER TABS -->
+      <div class="filter-tabs">
+        <div class="filter-tab active">📋 Todas</div>
+        <div class="filter-tab">✅ Pagas</div>
+        <div class="filter-tab">⏳ Pendentes</div>
+        <div class="filter-tab">⚠️ Vencidas</div>
+      </div>
+
       <!-- SUMMARY -->
       <div class="faturas-hero">
         <h3>Resumo 2026</h3>
@@ -140,18 +398,61 @@
         </div>
       </div>
 
+      <!-- STATISTICS -->
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="sb-label">Consumo Médio</div>
+          <div class="sb-value">287 kWh</div>
+          <div class="sb-change down">📉 -12% vs anterior</div>
+        </div>
+        <div class="stat-box">
+          <div class="sb-label">Custo Médio</div>
+          <div class="sb-value">41,30 €</div>
+          <div class="sb-change down">📉 -8% vs anterior</div>
+        </div>
+        <div class="stat-box">
+          <div class="sb-label">Próxima Fatura</div>
+          <div class="sb-value">15 Mar</div>
+          <div class="sb-change">em 20 dias</div>
+        </div>
+        <div class="stat-box">
+          <div class="sb-label">Poupança Verde</div>
+          <div class="sb-value">12,00 €</div>
+          <div class="sb-change down">✅ neste mês</div>
+        </div>
+      </div>
+
+      <!-- CONSUMPTION CHART -->
+      <div class="consumo-chart">
+        <h4>Evolução de Consumo (kWh)</h4>
+        <div class="chart-container" id="chartContainer">
+          <!-- Barras serão geradas por JavaScript -->
+        </div>
+      </div>
+
       <!-- FATURA LIST -->
       <div class="section-hdr"><h4>Histórico</h4><span>2026</span></div>
       <div class="fatura-list">
-        <div class="fatura-item">
+        <div class="fatura-item urgent">
           <div class="fi-icon pendente">🧾</div>
           <div class="fi-body">
             <div class="fi-mes">Fevereiro 2026</div>
-            <div class="fi-data">Vence a 15 Mar 2026</div>
+            <div class="fi-data">⚠️ Vence a 15 Mar 2026 (em 20 dias)</div>
           </div>
           <div class="fi-right">
             <div class="fi-valor">41,20 €</div>
             <div class="fi-status pendente">Pendente</div>
+          </div>
+        </div>
+        <div class="fatura-item">
+          <div class="fi-icon vencida">🧾</div>
+          <div class="fi-body">
+            <div class="fi-mes">Agosto 2025</div>
+            <div class="fi-data">⛔ Vencida a 14 Set 2025</div>
+          </div>
+          <div class="fi-right">
+            <div class="fi-valor">39,50 €</div>
+            <div class="fi-status vencida">Vencida</div>
           </div>
         </div>
         <div class="fatura-item">
@@ -240,6 +541,41 @@
           <div class="dr-value" style="font-size:16px;">41,20 €</div>
         </div>
         <button class="btn-primary" style="margin-top:14px;">⬇️ Descarregar PDF</button>
+      </div>
+
+      <!-- CONSUMPTION DETAILS -->
+      <div class="section-hdr" style="padding-top:14px;"><h4>Análise de Consumo — Fev 2026</h4></div>
+      <div class="consumo-detalhes">
+        <h4>Dados de Consumo</h4>
+        <div class="detalhe-item">
+          <div class="di-label">Consumo total</div>
+          <div class="di-value">287 kWh</div>
+        </div>
+        <div class="detalhe-item">
+          <div class="di-label">Consumo médio diário</div>
+          <div class="di-value">10.2 kWh</div>
+        </div>
+        <div class="detalhe-item">
+          <div class="di-label">Consumo pico</div>
+          <div class="di-value">15.4 kWh (19h-21h)</div>
+        </div>
+        <div class="detalhe-item">
+          <div class="di-label">Consumo fora de pico</div>
+          <div class="di-value">271.6 kWh (65%)</div>
+        </div>
+        <div class="detalhe-item">
+          <div class="di-label">Custo médio kWh</div>
+          <div class="di-value">0.113 €</div>
+        </div>
+        <div class="detalhe-item">
+          <div class="di-label">Energia renovável</div>
+          <div class="di-value" style="color: var(--green-dark); font-weight: 800;">100% ✅</div>
+        </div>
+      </div>
+
+      <!-- PAYMENT ACTION -->
+      <div style="padding: 0 16px 20px;">
+        <button class="btn-pay">💳 Pagar Fatura Pendente</button>
       </div>
 
     </div>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GoldEnergy — GoldRewards</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    .rewards-hero {
+      background: radial-gradient(circle at 20% 20%, #fbbf24 0%, #f59e0b 45%, #0f172a 100%);
+      margin: 16px; border-radius: 20px; padding: 18px;
+      color: white; position: relative; overflow: hidden;
+      animation: fadeUp 0.4s ease both;
+    }
+    .rewards-hero h3 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; }
+    .rewards-hero p { font-size: 12px; opacity: 0.85; margin-top: 6px; }
+    .rewards-hero .badge {
+      display: inline-block; margin-top: 10px; padding: 4px 10px; border-radius: 999px;
+      background: rgba(255,255,255,0.2); font-size: 10px; font-weight: 700;
+    }
+    .rewards-hero::after {
+      content: ""; position: absolute; right: -30px; top: -30px; width: 120px; height: 120px;
+      background: radial-gradient(circle, rgba(255,255,255,0.35), transparent 70%);
+    }
+
+    .mission-card, .reward-card {
+      background: white; border-radius: 16px; margin: 10px 16px 0; padding: 16px;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07); animation: fadeUp 0.4s ease both 0.1s;
+    }
+    .mission-card h4, .reward-card h4 {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;
+    }
+    .mission-item {
+      background: rgba(15, 23, 42, 0.04); border-radius: 12px; padding: 12px; margin-bottom: 10px;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    }
+    .mission-item:last-child { margin-bottom: 0; }
+    .mission-info { display: flex; flex-direction: column; gap: 4px; }
+    .mission-title { font-size: 12px; font-weight: 700; color: var(--text); }
+    .mission-desc { font-size: 10px; color: var(--text-muted); }
+    .mission-reward { font-size: 10px; font-weight: 700; color: #f59e0b; }
+    .mission-progress {
+      height: 6px; border-radius: 999px; background: rgba(15, 23, 42, 0.08); overflow: hidden; margin-top: 6px;
+    }
+    .mission-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #22c55e, #84cc16); }
+
+    .reward-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .reward-item {
+      background: rgba(245, 158, 11, 0.08); border-radius: 12px; padding: 12px; position: relative;
+    }
+    .reward-item h5 { font-size: 12px; font-weight: 700; color: var(--text); }
+    .reward-item p { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+    .reward-cost {
+      margin-top: 8px; font-size: 10px; font-weight: 700; color: #f59e0b;
+      display: inline-block; padding: 4px 8px; border-radius: 999px; background: rgba(245, 158, 11, 0.2);
+    }
+
+    .points-card {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      margin: 10px 16px 0; border-radius: 16px; padding: 16px; color: white;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.2);
+    }
+    .points-row { display: flex; justify-content: space-between; align-items: baseline; }
+    .points-val { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; }
+    .points-sub { font-size: 10px; opacity: 0.7; }
+
+    .wheel-card {
+      background: white; border-radius: 16px; margin: 10px 16px 0; padding: 16px;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07); animation: fadeUp 0.4s ease both 0.1s;
+    }
+    .wheel-card h4 {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px;
+    }
+    .wheel-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
+    .wheel {
+      width: 210px; height: 210px; border-radius: 50%;
+      border: 10px solid rgba(26,46,74,0.06);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.12), inset 0 0 20px rgba(0,0,0,0.08);
+      transition: transform 2.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      position: relative; overflow: hidden;
+    }
+    .wheel::before {
+      content: ""; position: absolute; inset: 10px; border-radius: 50%;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.25);
+    }
+    .wheel-center {
+      position: absolute; width: 60px; height: 60px; border-radius: 50%;
+      background: radial-gradient(circle, #1f2937 0%, #0b1220 70%);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .wheel-labels {
+      position: absolute; inset: 0;
+      display: block;
+      pointer-events: none;
+    }
+    .wheel-label {
+      position: absolute; left: 50%; top: 50%;
+      transform-origin: 0 0;
+      font-size: 9px; font-weight: 800; color: #0b1220;
+      text-transform: uppercase; letter-spacing: 0.04em;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.65);
+      padding: 2px 6px;
+      border-radius: 999px;
+      white-space: nowrap;
+      text-align: center;
+      max-width: 76px;
+    }
+    .wheel-pointer {
+      position: absolute; top: -8px; width: 0; height: 0;
+      border-left: 12px solid transparent; border-right: 12px solid transparent;
+      border-bottom: 18px solid #111827;
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+    }
+    .wheel-actions { display: flex; gap: 8px; align-items: center; margin-top: 12px; }
+    .wheel-btn {
+      padding: 8px 14px; border-radius: 12px; border: none; cursor: pointer;
+      background: linear-gradient(135deg, #0f172a, #1f2937); color: white; font-size: 11px; font-weight: 700;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .wheel-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .wheel-status { font-size: 11px; color: var(--text-muted); margin-top: 8px; }
+    .goal-toggle { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text); }
+    .goal-toggle input { accent-color: #22c55e; }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="app-header">
+    <div class="header-logo">
+      <div class="logo-mark">G</div>
+      <div class="logo-wordmark">
+        <div class="top"><span>gold</span>energy</div>
+        <div class="bottom">Eletricidade 100% Verde</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="header-time">17:08</div>
+      <div class="header-notif">🔔<div class="notif-dot"></div></div>
+    </div>
+  </div>
+
+  <div class="app-body">
+    <div class="sidebar">
+      <div class="nav-item" title="Inicio">🏠</div>
+      <div class="nav-item" title="Score">🌿</div>
+      <div class="nav-item" title="Solar">☀️</div>
+      <div class="nav-item" title="Previsao">📈</div>
+      <div class="nav-item active" title="Rewards">🏆</div>
+      <div class="nav-divider"></div>
+      <div class="nav-item" title="Faturas">🧾</div>
+      <div class="nav-item" title="Contrato">📄</div>
+      <div class="sidebar-bottom"><div class="nav-item" title="Perfil">👤</div></div>
+    </div>
+
+    <div class="content">
+      <div class="page-titlebar">
+        <a class="back-btn" href="index.html">‹</a>
+        <div class="page-titlebar-text">
+          <h2>GoldRewards</h2>
+          <p>Missoes, pontos e recompensas</p>
+        </div>
+        <div class="page-icon-btn">⭐</div>
+      </div>
+
+      <div class="rewards-hero">
+        <h3>Modo Desafio</h3>
+        <p>Completa missoes semanais e ganha pontos para trocar por recompensas.</p>
+        <span class="badge">NIVEL 3 • ECO RUNNER</span>
+      </div>
+
+      <div class="points-card">
+        <div class="points-row">
+          <div class="points-val">1 240</div>
+          <div class="points-sub">pontos disponiveis</div>
+        </div>
+      </div>
+
+      <div class="wheel-card">
+        <h4>Roda da sorte energetica</h4>
+        <div class="goal-toggle">
+          <input type="checkbox" id="daily-goal-toggle"/>
+          <span>Meta diaria atingida</span>
+        </div>
+        <div class="wheel-wrap" style="margin-top: 10px;">
+          <div class="wheel-pointer"></div>
+          <div class="wheel" id="reward-wheel">
+            <div class="wheel-labels" id="wheel-labels"></div>
+          </div>
+          <div class="wheel-center">Girar</div>
+        </div>
+        <div class="wheel-actions">
+          <button class="wheel-btn" id="spin-btn">Girar 1x/dia</button>
+          <span class="wheel-status" id="spin-status">Cumpre a meta diaria para desbloquear.</span>
+        </div>
+      </div>
+
+      <div class="mission-card">
+        <h4>Missoes ativas</h4>
+        <div class="mission-item">
+          <div class="mission-info">
+            <div class="mission-title">Reduz 5% nos proximos 7 dias</div>
+            <div class="mission-desc">Foco: 7 dias • Meta: -12 kWh</div>
+            <div class="mission-progress"><div class="mission-fill" style="width: 45%;"></div></div>
+          </div>
+          <div class="mission-reward">+120 pts</div>
+        </div>
+        <div class="mission-item">
+          <div class="mission-info">
+            <div class="mission-title">Sem picos acima de 15 kWh</div>
+            <div class="mission-desc">Foco: 14 dias • Max: 15 kWh</div>
+            <div class="mission-progress"><div class="mission-fill" style="width: 70%;"></div></div>
+          </div>
+          <div class="mission-reward">+180 pts</div>
+        </div>
+        <div class="mission-item">
+          <div class="mission-info">
+            <div class="mission-title">Consumo noturno consciente</div>
+            <div class="mission-desc">Foco: 22h-7h • 10 dias</div>
+            <div class="mission-progress"><div class="mission-fill" style="width: 30%;"></div></div>
+          </div>
+          <div class="mission-reward">+90 pts</div>
+        </div>
+      </div>
+
+      <div class="reward-card">
+        <h4>Recompensas</h4>
+        <div class="reward-grid">
+          <div class="reward-item">
+            <h5>Voucher 5 EUR</h5>
+            <p>Desconto na proxima fatura</p>
+            <span class="reward-cost">500 pts</span>
+          </div>
+          <div class="reward-item">
+            <h5>Arvore plantada</h5>
+            <p>Compensacao de CO2</p>
+            <span class="reward-cost">350 pts</span>
+          </div>
+          <div class="reward-item">
+            <h5>Upgrade Eco</h5>
+            <p>Plano verde premium</p>
+            <span class="reward-cost">900 pts</span>
+          </div>
+          <div class="reward-item">
+            <h5>Kit eficiencia</h5>
+            <p>Tomadas inteligentes</p>
+            <span class="reward-cost">1200 pts</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>
+  (function() {
+    const rewards = [
+      "+50 pts",
+      "Voucher 1 EUR",
+      "+120 pts",
+      "Arvore plantada",
+      "Bonus verde",
+      "Cupom 5%"
+    ];
+    const colors = [
+      "#16a34a", // verde
+      "#22c55e", // verde claro
+      "#f59e0b", // dourado
+      "#f97316", // laranja
+      "#ef4444", // vermelho suave
+      "#eab308"  // amarelo ouro
+    ];
+    const wheel = document.getElementById("reward-wheel");
+    const labelsEl = document.getElementById("wheel-labels");
+    const spinBtn = document.getElementById("spin-btn");
+    const statusEl = document.getElementById("spin-status");
+    const goalToggle = document.getElementById("daily-goal-toggle");
+
+    if (!wheel || !spinBtn || !statusEl || !goalToggle || !labelsEl) return;
+
+    const todayKey = new Date().toISOString().slice(0, 10);
+    const lastSpinKey = "goldRewardsLastSpin";
+    const lastRewardKey = "goldRewardsLastReward";
+    const lastSpin = localStorage.getItem(lastSpinKey);
+    const lastReward = localStorage.getItem(lastRewardKey);
+
+    const segmentSize = 360 / rewards.length;
+    const gradient = rewards.map((_, i) => {
+      const start = i * segmentSize;
+      const end = start + segmentSize;
+      return `${colors[i % colors.length]} ${start}deg ${end}deg`;
+    }).join(", ");
+    wheel.style.background = `conic-gradient(${gradient})`;
+
+    labelsEl.innerHTML = "";
+    rewards.forEach((label, i) => {
+      const angle = (i * segmentSize) + segmentSize / 2;
+      const labelEl = document.createElement("div");
+      labelEl.className = "wheel-label";
+      labelEl.textContent = label;
+      labelEl.style.transform = `rotate(${angle}deg) translate(0, -74px) rotate(${-angle}deg) translate(-50%, -50%)`;
+      labelsEl.appendChild(labelEl);
+    });
+
+    function setStatus(text) {
+      statusEl.textContent = text;
+    }
+
+    function lockIfSpun() {
+      if (lastSpin === todayKey) {
+        spinBtn.disabled = true;
+        setStatus(`Ja giraste hoje: ${lastReward || "recompensa"}`);
+        return true;
+      }
+      return false;
+    }
+
+    lockIfSpun();
+
+    spinBtn.addEventListener("click", () => {
+      if (!goalToggle.checked) {
+        setStatus("Cumpre a meta diaria para girar.");
+        return;
+      }
+      if (lockIfSpun()) return;
+
+      const rewardIndex = Math.floor(Math.random() * rewards.length);
+      const spins = 4 * 360 + (rewardIndex * segmentSize) + segmentSize / 2;
+      wheel.style.transform = `rotate(${spins}deg)`;
+
+      const reward = rewards[rewardIndex];
+      setTimeout(() => {
+        localStorage.setItem(lastSpinKey, todayKey);
+        localStorage.setItem(lastRewardKey, reward);
+        spinBtn.disabled = true;
+        setStatus(`Parabens! Ganhaste: ${reward}`);
+      }, 2400);
+    });
+  })();
+</script>
+</body>
+</html>

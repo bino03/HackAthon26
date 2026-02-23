@@ -189,10 +189,32 @@
           Introduz o valor indicado no teu contador.<br/>
           Leitura anterior: <strong>08 743 kWh</strong>
         </div>
+        <div style="margin-bottom:10px;">
+          <label for="foto-contador" style="font-size:12px;color:var(--text-muted);font-weight:600;display:block;text-align:center;margin-bottom:4px;">Ou envia uma foto do contador:</label>
+          <div style="display:flex;flex-direction:column;align-items:center;">
+            <div style="width:100%;display:flex;justify-content:center;">
+              <input type="file" accept="image/*" id="foto-contador" style="margin-top:6px;"/>
+            </div>
+            <div id="foto-filename" style="font-size:11px;color:var(--text-muted);margin-top:8px;text-align:center;width:100%;display:none;"></div>
+            <div id="foto-preview" style="margin-top:8px;"></div>
+          </div>
+        </div>
         <button class="btn-primary" onclick="submitLeitura()">📤 Submeter Leitura</button>
         <div id="success-msg">
           <div class="s-icon">✅</div>
           <p>Leitura submetida com sucesso! Consumo registado: 287 kWh</p>
+        </div>
+        <!-- DICAS DE POUPANÇA -->
+        <div class="dicas-poupanca-card" style="background:white;border-radius:16px;margin:16px 0 0;padding:14px 16px;box-shadow:0 2px 12px rgba(26,46,74,0.07);">
+          <h4 style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--green-dark);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Dicas de Poupança</h4>
+          <ul style="font-size:12px;color:var(--text-muted);line-height:1.6;padding-left:18px;margin:0;">
+            <li>Evita o uso de aparelhos em horas de ponta (22h–8h).</li>
+            <li>Desliga equipamentos em standby.</li>
+            <li>Utiliza lâmpadas LED e economiza até 80%.</li>
+            <li>Regula o termóstato para temperaturas eficientes.</li>
+            <li>Usa máquinas de lavar com carga completa.</li>
+            <li>Consulta o teu consumo regularmente para identificar excessos.</li>
+          </ul>
         </div>
       </div>
 
@@ -260,6 +282,43 @@
   </div>
 </div>
 <script>
+  // Preview da foto do contador
+  document.addEventListener('DOMContentLoaded', function() {
+    const fotoInput = document.getElementById('foto-contador');
+    const preview = document.getElementById('foto-preview');
+    const filenameDiv = document.getElementById('foto-filename');
+    if (fotoInput) {
+      filenameDiv.style.display = 'none';
+      fotoInput.addEventListener('change', function() {
+        preview.innerHTML = '';
+        if (fotoInput.files.length > 0) {
+          filenameDiv.style.display = 'none';
+          const file = fotoInput.files[0];
+          const img = document.createElement('img');
+          img.src = URL.createObjectURL(file);
+          img.style.maxWidth = '120px';
+          img.style.borderRadius = '8px';
+          img.style.boxShadow = '0 2px 8px rgba(26,46,74,0.12)';
+          img.alt = 'Foto do contador';
+          preview.appendChild(img);
+          // Mensagem placeholder para futura leitura automática
+          const msg = document.createElement('div');
+          msg.style.fontSize = '11px';
+          msg.style.color = 'var(--green-dark)';
+          msg.style.marginTop = '4px';
+          msg.textContent = 'Leitura automática em breve (OCR)...';
+          preview.appendChild(msg);
+        } else {
+          filenameDiv.textContent = 'Não foi escolhido nenhum ficheiro';
+          filenameDiv.style.display = 'block';
+        }
+      });
+      fotoInput.addEventListener('click', function() {
+        this.value = null;
+      });
+    }
+  });
+
   function submitLeitura() {
     const input = document.getElementById('leitura-input').value;
     const msg = document.getElementById('success-msg');

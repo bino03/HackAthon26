@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GoldEnergy — GoldCare</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+
+    /* ── HERO ── */
+    .care-hero {
+      background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+      margin: 16px; border-radius: 20px; padding: 18px;
+      display: flex; align-items: center; gap: 14px;
+      animation: fadeUp 0.4s ease both;
+    }
+    .care-hero-icon { font-size: 42px; flex-shrink: 0; }
+    .care-hero-text h3 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; color: white; }
+    .care-hero-text p  { font-size: 11px; color: rgba(255,255,255,0.75); margin-top: 3px; line-height: 1.4; }
+
+    /* ── RESUMO GLOBAL ── */
+    .resumo-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 8px; margin: 0 16px;
+      animation: fadeUp 0.4s ease both 0.04s;
+    }
+    .resumo-item {
+      background: white; border-radius: 12px;
+      padding: 10px 8px; text-align: center;
+      box-shadow: 0 2px 10px rgba(26,46,74,0.06);
+    }
+    .ri-val {
+      font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800;
+      color: var(--text); line-height: 1;
+    }
+    .ri-lbl { font-size: 9px; color: var(--text-muted); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .ri-val.red    { color: #f87171; }
+    .ri-val.yellow { color: #f59e0b; }
+    .ri-val.green  { color: #2DDBA4; }
+
+    /* ── LISTA PESSOAS ── */
+    .pessoas-card {
+      background: white; border-radius: 16px;
+      margin: 0 16px; overflow: hidden;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07);
+      animation: fadeUp 0.4s ease both 0.07s;
+    }
+    .pessoas-card-hdr {
+      padding: 12px 14px 10px;
+      font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em;
+      border-bottom: 1px solid rgba(26,46,74,0.05);
+    }
+
+    .pessoa-card {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 14px; cursor: pointer;
+      border-bottom: 1px solid rgba(26,46,74,0.05);
+      transition: background 0.15s;
+    }
+    .pessoa-card:last-child { border-bottom: none; }
+    .pessoa-card:hover  { background: #f8fafc; }
+    .pessoa-card.ativo  { background: #f0fdf9; border-left: 3px solid #2DDBA4; }
+
+    .pc-avatar {
+      width: 40px; height: 40px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0; position: relative;
+    }
+    .pc-status-dot {
+      position: absolute; bottom: -2px; right: -2px;
+      width: 10px; height: 10px; border-radius: 50%;
+      border: 2px solid white;
+    }
+    .pc-body { flex: 1; min-width: 0; }
+    .pc-nome {
+      font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+      color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .pc-idade { font-size: 11px; font-weight: 500; color: var(--text-muted); }
+    .pc-atividade { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+    .pc-consumo-bar {
+      height: 3px; background: rgba(26,46,74,0.08); border-radius: 2px; margin-top: 5px; overflow: hidden;
+    }
+    .pc-consumo-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
+
+    .pc-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+    .pc-badge {
+      font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 20px;
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .pc-alerta-count {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #f87171; color: white;
+      font-size: 10px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── DETALHE ── */
+    .detalhe-card {
+      background: white; border-radius: 16px;
+      margin: 0 16px;
+      box-shadow: 0 2px 12px rgba(26,46,74,0.07);
+      animation: fadeUp 0.4s ease both 0.1s;
+      overflow: hidden;
+    }
+
+    .detalhe-header {
+      padding: 14px; display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid rgba(26,46,74,0.06);
+    }
+    .dh-avatar {
+      width: 46px; height: 46px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0;
+    }
+    .dh-info { flex: 1; }
+    .dh-nome { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; color: var(--text); }
+    .dh-sub  { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+    .dh-ultima { font-size: 10px; color: var(--text-muted); margin-top: 3px; }
+    .dh-status {
+      font-size: 9px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+      text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0;
+    }
+
+    /* Stats rápidos */
+    .stats-quick {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid rgba(26,46,74,0.05);
+    }
+    .sq-item {
+      padding: 10px 8px; text-align: center;
+      border-right: 1px solid rgba(26,46,74,0.05);
+    }
+    .sq-item:last-child { border-right: none; }
+    .sq-val { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; color: var(--text); }
+    .sq-lbl { font-size: 9px; color: var(--text-muted); margin-top: 2px; }
+
+    /* Consumo barra */
+    .consumo-section { padding: 12px 14px; border-bottom: 1px solid rgba(26,46,74,0.05); }
+    .consumo-section h5 {
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px;
+    }
+    .consumo-barra-track {
+      height: 8px; background: rgba(26,46,74,0.07); border-radius: 4px; overflow: hidden; margin-bottom: 5px;
+    }
+    #d-consumo-barra { height: 100%; border-radius: 4px; transition: width 0.7s ease, background 0.3s; }
+    .consumo-nums { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); }
+
+    /* Dispositivos */
+    .disp-section { padding: 12px 14px; border-bottom: 1px solid rgba(26,46,74,0.05); }
+    .disp-section h5 {
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px;
+    }
+    .dispositivos-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .disp-card {
+      border-radius: 10px; padding: 8px 6px; text-align: center;
+      border: 1.5px solid rgba(26,46,74,0.08); position: relative;
+    }
+    .disp-card.on  { background: #f0fdf9; border-color: rgba(45,219,164,0.3); }
+    .disp-card.off { background: #f8fafc; }
+    .disp-icon  { font-size: 18px; margin-bottom: 3px; }
+    .disp-nome  { font-size: 8px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+    .disp-status { font-family: 'Syne', sans-serif; font-size: 9px; font-weight: 700; color: var(--text); margin-top: 2px; }
+    .disp-dot {
+      position: absolute; top: 5px; right: 5px;
+      width: 6px; height: 6px; border-radius: 50%;
+    }
+
+    /* Alertas */
+    .alertas-section { padding: 12px 14px; border-bottom: 1px solid rgba(26,46,74,0.05); }
+    .alertas-section h5 {
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px;
+    }
+    .alerta-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 10px; border-radius: 10px; margin-bottom: 6px;
+    }
+    .alerta-item:last-child { margin-bottom: 0; }
+    .alerta-critico { background: #fff1f1; border: 1px solid #fecaca; }
+    .alerta-aviso   { background: #fffbeb; border: 1px solid #fde68a; }
+    .ai-icon  { font-size: 14px; flex-shrink: 0; }
+    .ai-body  { flex: 1; }
+    .ai-msg   { font-size: 11px; font-weight: 600; color: var(--text); }
+    .ai-hora  { font-size: 9px; color: var(--text-muted); margin-top: 1px; }
+    .ai-btn {
+      font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 6px;
+      background: rgba(26,46,74,0.07); color: var(--text-muted);
+      border: none; cursor: pointer; flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .ai-btn:hover { background: rgba(26,46,74,0.14); }
+
+    /* Histórico */
+    .historico-section { padding: 12px 14px; border-bottom: 1px solid rgba(26,46,74,0.05); }
+    .historico-section h5 {
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px;
+    }
+    #historico-svg { width: 100%; height: 90px; display: block; overflow: visible; }
+
+    /* Botão contactar */
+    .detalhe-actions { padding: 12px 14px; }
+    #btn-contacto {
+      width: 100%; padding: 12px;
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      color: white; border: none; border-radius: 12px;
+      font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: opacity 0.2s;
+    }
+    #btn-contacto:hover { opacity: 0.9; }
+    #btn-contacto:active { opacity: 0.8; }
+
+    /* ── ADICIONAR PESSOA ── */
+    .add-btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin: 10px 16px 20px; padding: 12px;
+      background: white; border-radius: 12px;
+      border: 1.5px dashed rgba(26,46,74,0.15);
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      color: var(--text-muted); cursor: pointer; transition: all 0.2s;
+      box-shadow: 0 2px 10px rgba(26,46,74,0.04);
+    }
+    .add-btn:hover { border-color: #a855f7; color: #a855f7; background: #faf5ff; }
+  </style>
+</head>
+<body>
+<div class="phone">
+  <div class="app-header">
+    <div class="header-logo">
+      <div class="logo-mark">G</div>
+      <div class="logo-wordmark">
+        <div class="top"><span>gold</span>energy</div>
+        <div class="bottom">Eletricidade 100% Verde</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="header-time">17:08</div>
+      <div class="header-notif">🔔<div class="notif-dot"></div></div>
+    </div>
+  </div>
+
+  <div class="app-body">
+    <div class="sidebar">
+      <div class="nav-item" title="Início">🏠</div>
+      <div class="nav-item" title="Score">🌿</div>
+      <div class="nav-item" title="Solar">☀️</div>
+      <div class="nav-item" title="Previsão">📈</div>
+      <div class="nav-divider"></div>
+      <div class="nav-item" title="Faturas">🧾</div>
+      <div class="nav-item" title="Contrato">📄</div>
+      <div class="sidebar-bottom">
+        <div class="nav-item active" title="GoldCare">💜</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="page-titlebar">
+        <a class="back-btn" href="index.html">‹</a>
+        <div class="page-titlebar-text">
+          <h2>GoldCare</h2>
+          <p>Monitorização de familiares</p>
+        </div>
+        <div class="page-icon-btn">⚙️</div>
+      </div>
+
+      <!-- HERO -->
+      <div class="care-hero">
+        <div class="care-hero-icon">💜</div>
+        <div class="care-hero-text">
+          <h3>Cuida dos teus entes queridos</h3>
+          <p>Monitoriza o consumo em tempo real e recebe alertas quando algo muda</p>
+        </div>
+      </div>
+
+      <!-- RESUMO GLOBAL -->
+      <div class="section-hdr"><h4>Resumo</h4></div>
+      <div class="resumo-grid">
+        <div class="resumo-item">
+          <div class="ri-val" id="resumo-total">3</div>
+          <div class="ri-lbl">Pessoas</div>
+        </div>
+        <div class="resumo-item">
+          <div class="ri-val red" id="resumo-alertas">3</div>
+          <div class="ri-lbl">Alertas</div>
+        </div>
+        <div class="resumo-item">
+          <div class="ri-val yellow" id="resumo-risco">2</div>
+          <div class="ri-lbl">Em risco</div>
+        </div>
+        <div class="resumo-item">
+          <div class="ri-val green" id="resumo-ok">1</div>
+          <div class="ri-lbl">Normal</div>
+        </div>
+      </div>
+
+      <!-- LISTA PESSOAS -->
+      <div class="section-hdr" style="padding-top:14px;"><h4>Familiares</h4><span>3 monitorados</span></div>
+      <div class="pessoas-card">
+        <div class="pessoas-card-hdr">Seleciona para ver detalhes</div>
+        <div id="pessoas-lista"></div>
+      </div>
+
+      <!-- DETALHE -->
+      <div id="detalhe-section">
+        <div class="section-hdr" style="padding-top:14px;"><h4>Detalhe</h4></div>
+        <div class="detalhe-card">
+
+          <!-- Header dinâmico -->
+          <div class="detalhe-header" id="detalhe-header"></div>
+
+          <!-- Stats rápidos -->
+          <div class="stats-quick">
+            <div class="sq-item">
+              <div class="sq-val" id="d-consumo-hoje">—</div>
+              <div class="sq-lbl">Hoje</div>
+            </div>
+            <div class="sq-item">
+              <div class="sq-val" id="d-consumo-normal">—</div>
+              <div class="sq-lbl">Normal</div>
+            </div>
+            <div class="sq-item">
+              <div class="sq-val" id="d-consumo-diff">—</div>
+              <div class="sq-lbl">Diferença</div>
+            </div>
+            <div class="sq-item">
+              <div class="sq-val" id="d-temperatura">—</div>
+              <div class="sq-lbl">Temp. Casa</div>
+            </div>
+          </div>
+
+          <!-- Barra consumo -->
+          <div class="consumo-section">
+            <h5>Consumo hoje vs normal</h5>
+            <div class="consumo-barra-track">
+              <div id="d-consumo-barra" style="width:0%"></div>
+            </div>
+            <div class="consumo-nums">
+              <span>0 kWh</span>
+              <span id="d-consumo-pct">—</span>
+              <span id="d-consumo-normal2">—</span>
+            </div>
+          </div>
+
+          <!-- Dispositivos -->
+          <div class="disp-section">
+            <h5>Estado dos dispositivos</h5>
+            <div class="dispositivos-grid" id="dispositivos-grid"></div>
+          </div>
+
+          <!-- Alertas -->
+          <div class="alertas-section" id="alertas-section">
+            <h5>⚠️ Alertas ativos</h5>
+            <div id="alertas-lista"></div>
+          </div>
+
+          <!-- Histórico 7 dias -->
+          <div class="historico-section">
+            <h5>Consumo últimos 7 dias</h5>
+            <svg id="historico-svg" viewBox="0 0 260 90" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+
+          <!-- Ações -->
+          <div class="detalhe-actions">
+            <button id="btn-contacto">📞 Contactar</button>
+          </div>
+
+        </div><!-- /detalhe-card -->
+      </div><!-- /detalhe-section -->
+
+      <!-- ADICIONAR -->
+      <div class="add-btn" onclick="alert('Funcionalidade em desenvolvimento!')">
+        ＋ Adicionar familiar
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /app-body -->
+</div><!-- /phone -->
+
+<script src="js/goldcare.js"></script>
+</body>
+</html>
